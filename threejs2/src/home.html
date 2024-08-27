@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DouGongHome</title>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+          }
+        } 
+    </script>
+    <link rel="stylesheet" href="./css/style.css">
+<body>
+<!-- 第一个home --> 
+    <div class="canvas-container"></div>
+     <!-- 开启界面 -->
+     <div class="section section-1">
+      <div class="hidden-trigger hidden-trigger2"></div>
+       <div class="card big">
+         <div class="text-container text-container-1">
+        <h4>What is Dou Gong?</h4>
+      </div>
+    </div>
+  </div>
+  <!-- 第二页 -->
+  <div class="section section-2">
+    <div class="hidden-trigger hidden-trigger3"></div>
+    <div class="card big">
+      <div class="text-container text-container-2">
+        <h2>斗拱Dou Gong</h2>
+        <h3>A traditional Chinese architectural element, </h3>
+        <h3>Consisting of a series of interlocking wooden brackets </h3>
+        <h3>that support the overhanging eaves of a roof. </h3>
+        <h3>It allows for the distribution of weight and  </h3>
+        <h3>provides structural stability to buildings,  </h3>
+        <h3>Often seen in temples, palaces, and other historical structures. </h3>
+      </div>
+    </div>
+  </div>
+  <!-- 跳转链接 -->
+  <div class="section section-3">
+    <div class="hidden-trigger hidden-trigger4"></div>
+    <div class="card big">
+      <div class="text-container text-container-3">
+        <h4 >Let Us Discover More</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-4"></div>
+
+
+  <!-- 用于显示不同页面的 iframe -->
+  <!-- <iframe id="iframe-container" class="iframe-container" src="about:blank"></iframe> -->
+
+     <!-- 引入 GSAP 和 ScrollTrigger -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
+
+     <script type="module" src="./js/home.js"></script>
+    
+     <script>
+      window.onscroll = function() {
+        const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+        const maxScroll = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        window.parent.postMessage({ scrollPosition, maxScroll }, '*');
+      };
+    </script>
+     
+</body>
+</html>

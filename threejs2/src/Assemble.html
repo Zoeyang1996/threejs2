@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assemble-Dou-Gong</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .back-button {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%; /* 占满顶部宽度 */
+              padding: 20px 20px;
+              background-color: #333;
+              color: rgb(203, 157, 104);
+              border: none;
+              cursor: pointer;
+              font-size: 16px;
+              text-align: left; /* 左对齐文本 */
+              z-index: 1000; /* 确保按钮在最前方 */
+          }
+
+          .scene {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.8s ease-in-out, opacity 1s ease-in-out; /* 加入 transform 过渡效果 */
+            opacity: 0;
+            transform: translateY(0%); /* 初始位置在视口下方 */
+            z-index: 0;
+        }
+
+        .scene.active {
+            opacity: 1;
+            transform: translateY(0%); /* 目标位置在视口内 */
+            z-index: 1;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            overflow-y: auto; /* 确保 iframe 内的内容可滚动 */
+        }
+    </style>
+
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">Back</button>
+    <div id="first-scene" class="scene active">
+      <!-- 第三个场景的 iframe -->
+      <iframe src="wucai.html"></iframe>
+    </div>
+
+    <div id="second-scene" class="scene">
+      <!-- 第二个场景的 iframe -->
+      <iframe src="duowucai.html"></iframe>
+  </div>
+
+  <script>
+    function goBack() {
+        window.parent.postMessage({ action: 'showLinksContainer' }, '*');
+    }
+    </script>
+
+  <script>
+    const scenes = document.querySelectorAll('.scene');
+    let currentScene = 0;
+    let isScrolling = false;
+
+    function showScene(index) {
+        if (!isScrolling && index < scenes.length) {
+            scenes[currentScene].classList.remove('active');
+            currentScene = index;
+            scenes[currentScene].classList.add('active');
+            isScrolling = true;
+            setTimeout(() => { isScrolling = false; }, 1000); // 防止快速切换
+        }
+    }
+
+    // 监听第一个 iframe 的滚动事件
+    window.addEventListener('message', (event) => {
+        const { scrollPosition, maxScroll } = event.data;
+        if (scrollPosition >= maxScroll) {
+            showScene(1); // 切换到第二个 scene
+        }
+    });
+
+    // 监听第二个场景的滚动事件
+    window.addEventListener('message', (event) => {
+        const { scrollPosition, maxScroll } = event.data;
+        if (currentScene === 1 && scrollPosition <= 0) {
+            showScene(0); // 切换回第一个 scene
+        }
+    });
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is Dou Gong</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.8s ease-in-out, opacity 1s ease-in-out; /* 加入 transform 过渡效果 */
+            opacity: 0;
+            transform: translateY(0%); /* 初始位置在视口下方 */
+            z-index: 0;
+        }
+
+        .scene.active {
+            opacity: 1;
+            transform: translateY(0%); /* 目标位置在视口内 */
+            z-index: 1;
+        }
+
+        .links-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 水平和垂直居中 */
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            width: 80%; /* 设置宽度 */
+            max-width: 800px; /* 设置最大宽度 */
+            z-index: -1;
+        }
+
+        .links-container.active {
+            opacity: 1;
+            z-index: 3;
+        }
+
+
+        /* 定义常规英文字体 */
+        @font-face {
+            font-family: 'Megant';
+            src: url('./fonts/Megant-Personal-Use.ttf');
+        }
+        
+        .links-container h1 {
+            font-family: 'Megant';
+            font-size: 62px;
+            cursor: pointer;
+            color: rgb(203, 157, 104);
+            margin: 10px 0;
+            line-height: 1.1; /* 控制行高 */
+            transition: color 0.5s ease, transform 0.5s ease; /* 添加颜色和上浮效果的过渡 */
+        }
+
+        .links-container h1:hover {
+            color: rgb(250, 237, 178); /* 鼠标悬浮时的字体颜色 */
+            transform: translateY(-10px); /* 鼠标悬浮时的上浮效果 */
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            overflow-y: auto; /* Ensure scrollability */
+        }
+    </style>
+</head>
+<body>
+    <div id="first-scene" class="scene active">
+        <!-- 第一个场景的 iframe -->
+        <iframe src="home.html"></iframe>
+    </div>
+
+    <div id="second-scene" class="scene">
+      <!-- 第三个场景的 iframe -->
+      <iframe src="Assemble.html"></iframe>
+    </div>
+
+    <div id="thrid-scene" class="scene">
+      <!-- 第二个场景的 iframe -->
+      <iframe src="foguangsi.html"></iframe>
+  </div>
+
+   <!-- 链接容器，初始隐藏，滚动到home.html底部后显示 -->
+    <div id="links-container" class="links-container">
+        <h1 onclick="showScene(1)">Assemble<br>Dou Gong</h1>
+        <h1>&</h1>
+        <h1 onclick="showScene(2)">Explore<br>FoGuang Temple</h1>
+    </div>
+
+  <script>
+    const scenes = document.querySelectorAll('.scene');
+    const linksContainer = document.getElementById('links-container');
+    let currentScene = 0;
+    let isScrolling = false;
+
+    function showScene(index) {
+        if (!isScrolling) {
+            scenes[currentScene].classList.remove('active');
+            currentScene = index;
+            scenes[currentScene].classList.add('active');
+
+            // 隐藏 linksContainer 当切换到子页面时
+            if (index > 0) {
+                linksContainer.classList.remove('active');
+            } 
+            isScrolling = true;
+            setTimeout(() => { isScrolling = false; }, 1000);  // 防止快速切换
+        }
+    }
+
+    window.addEventListener('message', (event) => {
+         if (event.data.action === 'showLinksContainer') {
+        // 切换到链接容器场景
+        showScene(0);
+        linksContainer.classList.add('active');
+    } else {
+        const { scrollPosition, maxScroll } = event.data;
+        if (scrollPosition >= maxScroll) {
+            linksContainer.classList.add('active');
+        } else {
+            linksContainer.classList.remove('active');
+        }
+    }
+});
+  </script>
+
+</body>
+</html>
